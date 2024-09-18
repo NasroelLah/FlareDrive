@@ -2,7 +2,7 @@ import pLimit from "p-limit";
 
 import { encodeKey, FileItem } from "../FileGrid";
 
-const WEBDAV_ENDPOINT = "/webdav/";
+const WEBDAV_ENDPOINT = "/api/";
 
 export async function fetchPath(path: string) {
   const res = await fetch(`${WEBDAV_ENDPOINT}${encodeKey(path)}`, {
