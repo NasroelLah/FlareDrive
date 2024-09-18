@@ -204,7 +204,7 @@ function Main({
         onDownload={() => {
           if (multiSelected?.length !== 1) return;
           const a = document.createElement("a");
-          a.href = `/webdav/${encodeKey(multiSelected[0])}`;
+          a.href = `/api/${encodeKey(multiSelected[0])}`;
           a.download = multiSelected[0].split("/").pop()!;
           a.click();
         }}
@@ -223,7 +223,7 @@ function Main({
           const confirmMessage = "Delete the following file(s) permanently?";
           if (!window.confirm(`${confirmMessage}\n${filenames}`)) return;
           for (const key of multiSelected)
-            await fetch(`/webdav/${encodeKey(key)}`, { method: "DELETE" });
+            await fetch(`/api/${encodeKey(key)}`, { method: "DELETE" });
           fetchFiles();
         }}
       />

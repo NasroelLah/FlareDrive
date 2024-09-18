@@ -59,7 +59,7 @@ function FileGrid({
         <Grid item key={file.key} xs={12} sm={6} md={4} lg={3} xl={2}>
           <ListItemButton
             component="a"
-            href={`/webdav/${encodeKey(file.key)}`}
+            href={`/api/${encodeKey(file.key)}`}
             target="_blank"
             rel="noopener noreferrer"
             selected={multiSelected?.includes(file.key)}
@@ -80,7 +80,7 @@ function FileGrid({
             <ListItemIcon>
               {file.customMetadata?.thumbnail ? (
                 <img
-                  src={`/webdav/_$flaredrive$/thumbnails/${file.customMetadata.thumbnail}.png`}
+                  src={`/api/_$flaredrive$/thumbnails/${file.customMetadata.thumbnail}.png`}
                   alt={file.key}
                   style={{ width: 36, height: 36, objectFit: "cover" }}
                 />

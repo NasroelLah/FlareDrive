@@ -36,7 +36,7 @@ export async function fetchPath(path: string) {
         "thumbnail"
       )[0]?.textContent;
       return {
-        key: decodeURI(href).replace(/^\/webdav\//, ""),
+        key: decodeURI(href).replace(/^\/api\//, ""),
         size: size ? Number(size) : 0,
         uploaded: lastModified!,
         httpMetadata: { contentType: contentType! },
@@ -161,7 +161,7 @@ export async function multipartUpload(
   const headers = options?.headers || {};
   headers["content-type"] = file.type;
 
-  const uploadResponse = await fetch(`/webdav/${encodeKey(key)}?uploads`, {
+  const uploadResponse = await fetch(`/api/${encodeKey(key)}?uploads`, {
     headers,
     method: "POST",
   });
@@ -177,7 +177,7 @@ export async function multipartUpload(
         partNumber: i.toString(),
         uploadId,
       });
-      const res = await xhrFetch(`/webdav/${encodeKey(key)}?${searchParams}`, {
+      const res = await xhrFetch(`/api/${encodeKey(key)}?${searchParams}`, {
         method: "PUT",
         headers,
         body: chunk,
@@ -194,7 +194,7 @@ export async function multipartUpload(
   );
   const uploadedParts = await Promise.all(promises);
   const completeParams = new URLSearchParams({ uploadId });
-  await fetch(`/webdav/${encodeKey(key)}?${completeParams}`, {
+  await fetch(`/api/${encodeKey(key)}?${completeParams}`, {
     method: "POST",
     body: JSON.stringify({ parts: uploadedParts }),
   });
@@ -250,7 +250,7 @@ export async function processUploadQueue() {
       const thumbnailBlob = await generateThumbnail(file);
       const digestHex = await blobDigest(thumbnailBlob);
 
-      const thumbnailUploadUrl = `/webdav/_$flaredrive$/thumbnails/${digestHex}.png`;
+      const thumbnailUploadUrl = `/api/_$flaredrive$/thumbnails/${digestHex}.png`;
       try {
         await fetch(thumbnailUploadUrl, {
           method: "PUT",
