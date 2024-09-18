@@ -2,7 +2,7 @@ import pLimit from "p-limit";
 
 import { encodeKey, FileItem } from "../FileGrid";
 
-const WEBDAV_ENDPOINT = "/api/";
+const WEBDAV_ENDPOINT = "/file/";
 
 export async function fetchPath(path: string) {
   const res = await fetch(`${WEBDAV_ENDPOINT}${encodeKey(path)}`, {
@@ -36,7 +36,7 @@ export async function fetchPath(path: string) {
         "thumbnail"
       )[0]?.textContent;
       return {
-        key: decodeURI(href).replace(/^\/api\//, ""),
+        key: decodeURI(href).replace(/^\/file\//, ""),
         size: size ? Number(size) : 0,
         uploaded: lastModified!,
         httpMetadata: { contentType: contentType! },
@@ -161,7 +161,7 @@ export async function multipartUpload(
   const headers = options?.headers || {};
   headers["content-type"] = file.type;
 
-  const uploadResponse = await fetch(`/api/${encodeKey(key)}?uploads`, {
+  const uploadResponse = await fetch(`/file/${encodeKey(key)}?uploads`, {
     headers,
     method: "POST",
   });
@@ -177,7 +177,7 @@ export async function multipartUpload(
         partNumber: i.toString(),
         uploadId,
       });
-      const res = await xhrFetch(`/api/${encodeKey(key)}?${searchParams}`, {
+      const res = await xhrFetch(`/file/${encodeKey(key)}?${searchParams}`, {
         method: "PUT",
         headers,
         body: chunk,
@@ -194,7 +194,7 @@ export async function multipartUpload(
   );
   const uploadedParts = await Promise.all(promises);
   const completeParams = new URLSearchParams({ uploadId });
-  await fetch(`/api/${encodeKey(key)}?${completeParams}`, {
+  await fetch(`/file/${encodeKey(key)}?${completeParams}`, {
     method: "POST",
     body: JSON.stringify({ parts: uploadedParts }),
   });
@@ -250,7 +250,7 @@ export async function processUploadQueue() {
       const thumbnailBlob = await generateThumbnail(file);
       const digestHex = await blobDigest(thumbnailBlob);
 
-      const thumbnailUploadUrl = `/api/_$flaredrive$/thumbnails/${digestHex}.png`;
+      const thumbnailUploadUrl = `/file/_$flaredrive$/thumbnails/${digestHex}.png`;
       try {
         await fetch(thumbnailUploadUrl, {
           method: "PUT",

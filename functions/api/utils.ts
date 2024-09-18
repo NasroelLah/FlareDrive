@@ -4,7 +4,7 @@ export interface RequestHandlerParams {
   request: Request;
 }
 
-export const WEBDAV_ENDPOINT = "/api/";
+export const WEBDAV_ENDPOINT = "/file/";
 
 export function notFound() {
   return new Response("Not found", { status: 404 });
